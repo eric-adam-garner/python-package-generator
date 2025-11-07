@@ -9,7 +9,7 @@ from typing import Dict
 from tests.consts import PROJECT_DIR
 
 
-def generate_project(template_values_p: Dict[str, str]) -> Path:
+def generate_project(template_values_p: Dict[str, str], test_session_id: str) -> Path:
     
     template_values: Dict[str, str] = deepcopy(template_values_p)
     
@@ -17,7 +17,7 @@ def generate_project(template_values_p: Dict[str, str]) -> Path:
         "default_context": template_values
     }
     
-    cookie_cutter_config_path = PROJECT_DIR / "cookie-cutter-test-config.json"
+    cookie_cutter_config_path = PROJECT_DIR / f"cookiecutter-test-config-{test_session_id}.json"
     cookie_cutter_config_path.write_text(json.dumps(cookie_cutter_config))
     
     cmd = [
