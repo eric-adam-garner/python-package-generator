@@ -3,7 +3,7 @@ markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
 
 [tool.black]
 line-length = 119
-exclude = ["venv"]
+exclude = "venv"
 
 [tool.flake8]
 docstring-convention = "all"
@@ -19,6 +19,9 @@ profile = "black"
 multi_line_output = "VERTICAL_HANGING_INDENT"
 force_grid_wrap = 2
 line_length = 119
+
+[tool.pylint.main]
+ignore = ["venv"]
 
 [tool.pylint."messages control"]
 disable = [
@@ -46,3 +49,10 @@ line-length = 119
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["E402"]
 "path/to/file.py" = ["E402"]
+
+[tool.mypy]
+exclude = [
+  "venv",
+  ".venv",
+  "env"
+]

@@ -76,7 +76,6 @@ repos:
       - id: pylint
         args:
           - --rcfile=./pyproject.toml
-          - --ignore=venv,.venv
 
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0

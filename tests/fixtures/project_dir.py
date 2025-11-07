@@ -14,7 +14,6 @@ from tests.utils.project import (
 
 @pytest.fixture(scope="session")
 def project_dir() -> Generator[Path, None, None]:
-    
     test_session_id = generate_test_session_id()
     template_values = {"repo_name": f"test-repo-{test_session_id}"}
     generated_repo_dir: Path = generate_project(template_values, test_session_id)
@@ -24,7 +23,8 @@ def project_dir() -> Generator[Path, None, None]:
         yield generated_repo_dir
     finally:
         shutil.rmtree(generated_repo_dir)
-        
+
+
 def generate_test_session_id() -> str:
     uuid = str(uuid4())[:6]
     return uuid
