@@ -17,7 +17,7 @@ def generate_project(template_values_p: Dict[str, str], test_session_id: str) ->
         "default_context": template_values
     }
     
-    cookie_cutter_config_path = PROJECT_DIR / f"cookiecutter-test-config-{test_session_id}.json"
+    cookie_cutter_config_path = PROJECT_DIR / "sample" / "cookiecutter-test-config-{test_session_id}.json"
     cookie_cutter_config_path.write_text(json.dumps(cookie_cutter_config))
     
     cmd = [
