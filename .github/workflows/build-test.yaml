@@ -1,4 +1,4 @@
-name: Build, Test, and Publish
+name: Build and Test
 
 on:
   pull_request:
@@ -42,7 +42,11 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.8
-      - name: Lint, Format, and other static code quality checks
+      - name: Configure Git CLI
+        run: |
+          git config --global user.email "git-bot-user@nowhere.com"
+          git config --global user.name "git-bot-user"
+      - name: Run tests
         run: |
           make install
           make test

@@ -54,5 +54,6 @@ line-length = 119
 exclude = [
   "venv",
   ".venv",
-  "env"
+  "env",
+  "{{cookiecutter.repo_name}}"
 ]

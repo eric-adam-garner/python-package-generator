@@ -1,3 +1,5 @@
+"""Utility function for generating and testing project repos."""
+
 import json
 import os
 import subprocess
@@ -9,6 +11,7 @@ from tests.consts import PROJECT_DIR
 
 
 def generate_project(template_values_p: Dict[str, str], test_session_id: str) -> Path:
+    """Generate project repo."""
     template_values: Dict[str, str] = deepcopy(template_values_p)
 
     cookie_cutter_config = {"default_context": template_values}
@@ -36,6 +39,7 @@ def generate_project(template_values_p: Dict[str, str], test_session_id: str) ->
 
 
 def initialize_git_repo(repo_dir: Path):
+    """Initialize git in repo."""
     subprocess.run(["pwd"], cwd=repo_dir, check=True)
     subprocess.run(["git", "init"], cwd=repo_dir, check=True)
     subprocess.run(["git", "add", "--all"], cwd=repo_dir, check=True)

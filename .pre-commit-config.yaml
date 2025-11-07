@@ -61,7 +61,13 @@ repos:
             --no-strict-optional,
             --ignore-missing-imports,
             --config-file=./pyproject.toml,
+            --explicit-package-bases,
           ]
+        exclude: |
+          (?x)
+          (
+            (?<=/)tests/   # tests folder preceded by a slash (nested)
+          )
 
   - repo: https://github.com/psf/black
     rev: 23.1.0
