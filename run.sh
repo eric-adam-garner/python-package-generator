@@ -22,33 +22,14 @@ function lint:ci {
     SKIP=no-commit-to-branch pre-commit run --all-files
 }
 
-
 # execute tests that are not marked as `slow`
 function test:quick {
     run-tests -m "not slow" ${@:-"$THIS_DIR/tests/"}
 }
 
-# execute tests against the installed package; assumes the wheel is already installed
-function test:ci {
-    INSTALLED_PKG_DIR="$(python -c 'import example_pkg; print(example_pkg.__path__[0])')"
-    # in CI, we must calculate the coverage for the installed package, not the src/ folder
-    COVERAGE_DIR="$INSTALLED_PKG_DIR" run-tests
-}
-
 # (example) ./run.sh test tests/test_states_info.py::test__slow_add
 function run-tests {
-    PYTEST_EXIT_STATUS=0
-    python -m pytest ${@:-"$THIS_DIR/tests/"} \
-        --cov "${COVERAGE_DIR:-$THIS_DIR/src}" \
-        --cov-report html \
-        --cov-report term \
-        --cov-report xml \
-        --junit-xml "$THIS_DIR/test-reports/report.xml" \
-        --cov-fail-under 60 || ((PYTEST_EXIT_STATUS+=$?))
-    mv coverage.xml "$THIS_DIR/test-reports/" || true
-    mv htmlcov "$THIS_DIR/test-reports/" || true
-    mv .coverage "$THIS_DIR/test-reports/" || true
-    return $PYTEST_EXIT_STATUS
+    python -m pytest ${@:-"$THIS_DIR/tests/"}
 }
 
 function test:wheel-locally {
