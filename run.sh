@@ -145,24 +145,24 @@ function configure-repo {
     # Configure github actions secrets
     gh secret set TEST_PYPI_TOKEN \
         --body "$TEST_PYPI_TOKEN" \
-        --repo "$GITHUB_USERNAME/$REPO_NAME"
+        --repo "$GITHUB_USERNAME/$REPO_NAME" \
+        && echo "Set pypi tokens"
 
     gh secret set PROD_PYPI_TOKEN \
         --body "$PROD_PYPI_TOKEN" \
         --repo "$GITHUB_USERNAME/$REPO_NAME"
 
-    # Proect main branch by enforcing passing build on feature branch before merge
-    BRANCH_NAME="main"
-    gh api -X PUT "repos/$GITHUB_USERNAME/$REPO_NAME/branches/$BRANCH_NAME/protection" \
-        -H "Accept: application/vnd.github+json" \
-        -F "required_status_checks[strict]=true" \
-        -F "required_status_checks[checks][][context]=check-version-txt" \
-        -F "required_status_checks[checks][][context]=lint-format-and-static-code-checks" \
-        -F "required_status_checks[checks][][context]=buid-wheel-and-sdist" \
-        -F "required_status_checks[checks][][context]=execute-tests" \
-        -F "required_pull_request_reviews[required_approving_review_count]=1" \
-        -F "enforce_admins=null" \
-        -F "restrictions=null" > /dev/null
+    # # Proect main branch by enforcing passing build on feature branch before merge (requires pro account)
+    # gh api -X PUT "repos/$GITHUB_USERNAME/$REPO_NAME/branches/main/protection" \
+    #     -H "Accept: application/vnd.github+json" \
+    #     -F "required_status_checks[strict]=true" \
+    #     -F "required_status_checks[checks][][context]=check-version-txt" \
+    #     -F "required_status_checks[checks][][context]=lint-format-and-static-code-checks" \
+    #     -F "required_status_checks[checks][][context]=buid-wheel-and-sdist" \
+    #     -F "required_status_checks[checks][][context]=execute-tests" \
+    #     -F "required_pull_request_reviews[required_approving_review_count]=1" \
+    #     -F "enforce_admins=null" \
+    #     -F "restrictions=null" > /dev/null
 }
 
 # args:
@@ -209,6 +209,9 @@ EOF
     # Checkout new feature branch
     UUID=$(uuidgen)
     UNIQUE_BRANCH_NAME=feat/populating-from-template-${UUID:0:6}
+
+    git config --global user.email "eric.adam.garner@gmail.com"
+    git config --global user.name "Eric Adam Garner"
 
     cd "./outdir/$REPO_NAME"
     git checkout -b "$UNIQUE_BRANCH_NAME"
