@@ -146,6 +146,17 @@ function configure-repo {
         --repo "$GITHUB_USERNAME/$REPO_NAME"
 
     # Proect main branch by enforcing passing build on feature branch before merge
+    BRANCH_NAME="main"
+    gh api -X PUT "repos/$GITHUB_USERNAME/$REPO_NAME/branches/$BRANCH_NAME/protection" \
+        -H "Accept: application/vnd.github+json" \
+        -F "required_status_checks[strict]=true" \
+        -F "required_status_checks[checks][][context]=check-version-txt" \
+        -F "required_status_checks[checks][][context]=lint-format-and-static-code-checks" \
+        -F "required_status_checks[checks][][context]=buid-wheel-and-sdist" \
+        -F "required_status_checks[checks][][context]=execute-tests" \
+        -F "required_pull_request_reviews[required_approving_review_count]=1" \
+        -F "enforce_admins=null" \
+        -F "restrictions=null" > /dev/null
 }
 
 # args:
