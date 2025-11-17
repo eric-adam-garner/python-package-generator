@@ -17,7 +17,7 @@ on:
         default: false
         type: boolean
       protect_main:
-        description: "Requires GitHub Pro for private repos."
+        description: "Protect main branch (requires GitHub Pro for private repos)."
         required: false
         default: false
         type: boolean
