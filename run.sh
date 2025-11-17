@@ -134,13 +134,13 @@ function create-repo-if-not-exists {
         git remote set-url origin "https://$GITHUB_USERNAME:$GH_TOKEN@github.com/$GITHUB_USERNAME/$REPO_NAME"
     fi
     git push origin main
-
 }
 
 # args:
 #   TEST_PYPI_TOKEN, PROD_PYPI_TOKEN
 #   REPO_NAME
 #   GITHUB_USERNAME
+#   PROTECT_MAIN
 function configure-repo {
     # Configure github actions secrets
     gh secret set TEST_PYPI_TOKEN \
@@ -152,17 +152,19 @@ function configure-repo {
         --body "$PROD_PYPI_TOKEN" \
         --repo "$GITHUB_USERNAME/$REPO_NAME"
 
-    # # Proect main branch by enforcing passing build on feature branch before merge (requires pro account)
-    # gh api -X PUT "repos/$GITHUB_USERNAME/$REPO_NAME/branches/main/protection" \
-    #     -H "Accept: application/vnd.github+json" \
-    #     -F "required_status_checks[strict]=true" \
-    #     -F "required_status_checks[checks][][context]=check-version-txt" \
-    #     -F "required_status_checks[checks][][context]=lint-format-and-static-code-checks" \
-    #     -F "required_status_checks[checks][][context]=buid-wheel-and-sdist" \
-    #     -F "required_status_checks[checks][][context]=execute-tests" \
-    #     -F "required_pull_request_reviews[required_approving_review_count]=1" \
-    #     -F "enforce_admins=null" \
-    #     -F "restrictions=null" > /dev/null
+    # Protect main branch by enforcing passing build on feature branch before merge (requires pro account)
+    if [[ "$PROTECT_MAIN" == "true" ]]; then
+        gh api -X PUT "repos/$GITHUB_USERNAME/$REPO_NAME/branches/main/protection" \
+            -H "Accept: application/vnd.github+json" \
+            -F "required_status_checks[strict]=true" \
+            -F "required_status_checks[checks][][context]=check-version-txt" \
+            -F "required_status_checks[checks][][context]=lint-format-and-static-code-checks" \
+            -F "required_status_checks[checks][][context]=buid-wheel-and-sdist" \
+            -F "required_status_checks[checks][][context]=execute-tests" \
+            -F "required_pull_request_reviews[required_approving_review_count]=1" \
+            -F "enforce_admins=null" \
+            -F "restrictions=null" > /dev/null
+        fi
 }
 
 # args:

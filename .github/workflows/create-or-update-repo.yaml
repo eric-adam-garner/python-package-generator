@@ -7,15 +7,21 @@ on:
         description: "Name of the repo to create"
         required: true
         type: string
+      package_import_name:
+        description: "Used in imports e.g. from <name> import ..."
+        required: true
+        type: string
       is_public:
         description: "If unchecked, repo is private"
         required: false
         default: false
         type: boolean
-      package_import_name:
-        description: "Used in imports e.g. from <name> import ..."
-        required: true
-        type: string
+      protect_main:
+        description: "Requires GitHub Pro for private repos."
+        required: false
+        default: false
+        type: boolean
+
 
 env:
   GH_TOKEN: ${{ secrets.PERSONAL_GH_TOKEN }}
@@ -51,6 +57,7 @@ jobs:
           GITHUB_USERNAME: eric-adam-garner
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
           PROD_PYPI_TOKEN: ${{ secrets.PROD_PYPI_TOKEN }}
+          PROTECT_MAIN: ${{ github.event.inputs.protect_main }}
         run: |
           bash run.sh configure-repo
 
